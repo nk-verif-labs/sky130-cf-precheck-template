@@ -1,0 +1,12 @@
+name: Dual-Sim Cocotb CI
+on: [push, pull_request]
+jobs:
+  sim:
+    strategy:
+      matrix: { sim: [icarus, verilator] }
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y iverilog verilator python3-pip
+      - run: pip install --break-system-packages "cocotb==1.9.2" pytest
+      - run: make SIM=${{ matrix.sim }}
